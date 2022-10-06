@@ -44,6 +44,14 @@ class CommentListCreateView(generics.ListCreateAPIView):
     serializer_class = serializers.CommentSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthor)
 
 # function based view
 # @api_view(['GET'])
