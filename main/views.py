@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics, permissions
-from main.models import Category, Post
+from main.models import Category, Post, Comment
 from . import serializers
 from .permissions import IsAuthor
 
@@ -36,7 +36,13 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_class(self):
         if self.request.method in ('PUT', 'PATCH'):
             return serializers.PostCreateSerializer
-        return serializers.PostSerializerё
+        return serializers.PostSerializer
+
+
+class CommentListCreateView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 # function based view
