@@ -31,6 +31,21 @@ class Post(models.Model):
         verbose_name_plural = 'Публикации'
 
 
+class PostImages(models.Model):
+    title = models.CharField(max_length=150, blank=True)
+    image = models.ImageField(upload_to='images/')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
+
+    @staticmethod
+    def generate_name():
+        from random import randint
+        return 'image' + str(randint(100000, 1000000))
+
+    def save(self, *args, **kwargs):
+        self.title = self.generate_name()
+        return super(PostImages, self).save(*args, **kwargs)
+
+
 class Comment(models.Model):
     owner = models.ForeignKey('auth.User', related_name='comments', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
