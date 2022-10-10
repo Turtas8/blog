@@ -58,3 +58,19 @@ class Comment(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
+
+class Like(models.Model):
+    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='liked')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+
+    class Meta:
+        unique_together = ['owner', 'post']
+
+
+class Favorites(models.Model):
+    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='favorites')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='favorites')
+
+    class Meta:
+        unique_together = ['owner', 'post']
